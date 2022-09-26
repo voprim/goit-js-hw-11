@@ -22,7 +22,7 @@ let gallery = new SimpleLightbox('.gallery a', {
 
 const pixabayAPI = {
   baseUrl: 'https://pixabay.com/api/',
-  key: '3705719-850a353db1ffe60c326d386e6',
+  key: '30147875-1b32fddb16ed51bfbd356d818',
   image_type: 'photo',
   orientation: 'horizontal',
   safesearch: 'true',
