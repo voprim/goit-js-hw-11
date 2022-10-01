@@ -1,24 +1,14 @@
 import './sass/main.scss';
 import { Notify } from 'notiflix';
 const axios = require('axios').default;
-// Описан в документации
 import SimpleLightbox from 'simplelightbox';
-// Дополнительный импорт стилей
 import 'simplelightbox/dist/simple-lightbox.min.css';
-
-// -------------------------------------------------------------------------------------------------------
-//let variables
-
 let searchQueryResult = '';
 let q = '';
 let pageN = 1;
 let gallery = new SimpleLightbox('.gallery a', {
-  /* options */ enableKeyboard: true,
+  enableKeyboard: true,
 });
-
-//Objects
-
-//pixabayObj
 
 const pixabayAPI = {
   baseUrl: 'https://pixabay.com/api/',
@@ -31,21 +21,13 @@ const pixabayAPI = {
   per_page: '40',
 };
 
-//markup
-
 const markupData = {
   markup: '',
   htmlCode: '',
 };
 
-// -------------------------------------------------------------------------------------------------------
-// searchForm and gallery find in DOM
-
 const searchForm = document.querySelector('.search-form');
 const gallerySelector = document.querySelector('.gallery');
-
-// -------------------------------------------------------------------------------------------------------
-// event listener search form
 
 searchForm.addEventListener('submit', async e => {
   e.preventDefault();
@@ -117,9 +99,6 @@ searchForm.addEventListener('submit', async e => {
   console.log('');
 });
 
-// -------------------------------------------------------------------------------------------------------
-// button load more
-
 const btnLoadMore = document.querySelector('.load-more');
 btnLoadMore.addEventListener('click', async () => {
   pageN += 1;
@@ -151,9 +130,6 @@ btnLoadMore.addEventListener('click', async () => {
   console.log('btnLoadMore working');
   console.log('');
 });
-
-// -------------------------------------------------------------------------------------------------------
-// fetch photos function
 
 async function fetchPhotos(searchQueryResult) {
   const { baseUrl, key, image_type, orientation, safesearch, order, page, per_page } = pixabayAPI;
@@ -198,9 +174,6 @@ async function fetchPhotos(searchQueryResult) {
   //received data
   return results;
 }
-
-// -------------------------------------------------------------------------------------------------------
-// render photos function, make html markup
 
 async function renderedPhotos(results) {
   const { hits } = results;
