@@ -1,87 +1,31 @@
 import './sass/main.scss';
-import { Notify } from 'notiflix';
 const axios = require('axios').default;
-import SimpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
+import variables from './js/variables';
 import renderedPhotos from './js/renderedPhotos';
 import { pixabayAPI } from './js/responsesAPI';
+import handleSubmit from './js/handleSubmit';
 
 export const markupData = {
   markup: '',
   htmlCode: '',
 };
-
-export let searchQueryResult = '';
-export let q = '';
-export let pageN = 1;
-export let gallery = new SimpleLightbox('.gallery a', {
-  enableKeyboard: true,
-});
-
-const searchForm = document.querySelector('.search-form');
 export const gallerySelector = document.querySelector('.gallery');
 export const btnLoadMore = document.querySelector('.load-more');
-
-searchForm.addEventListener('submit', async e => {
-  e.preventDefault();
-  const {
-    elements: { searchQuery },
-  } = e.target;
-  searchQueryResult = searchQuery.value;
-
-  if (searchQuery.value === '') {
-    gallerySelector.innerHTML = '';
-    btnLoadMore.classList.remove('is-visible');
-    return Notify.failure('Sorry, there are no images matching your search query. Please try again.');
-  }
-  if (searchQuery.value !== q) {
-    pageN = 1;
-    pixabayAPI.page = `${pageN}`;
-
-    gallerySelector.innerHTML = '';
-    btnLoadMore.classList.remove('is-visible');
-  } else {
-    pageN += 1;
-    pixabayAPI.page = `${pageN}`;
-    btnLoadMore.classList.remove('is-visible');
-  }
-
-  q = searchQuery.value;
-
-  try {
-    const results = await fetchPhotos(searchQuery.value);
-    markupData.htmlCode = await renderedPhotos(results);
-
-    gallerySelector.insertAdjacentHTML('beforeend', markupData.htmlCode);
-    btnLoadMore.classList.add('is-visible');
-
-    gallery.refresh();
-
-    const { page, per_page } = pixabayAPI;
-    const { totalHits } = results;
-    const totalPages = Math.ceil(totalHits / per_page);
-
-    if (page >= totalPages) {
-      btnLoadMore.classList.remove('is-visible');
-    }
-    Notify.success(`'Hooray! We found ${results.totalHits} images.'`);
-  } catch (error) {
-    Notify.failure('Sorry, there are no images matching your search query. Please try again.');
-  }
-});
+const searchForm = document.querySelector('.search-form');
+searchForm.addEventListener('submit', handleSubmit);
 
 btnLoadMore.addEventListener('click', async () => {
-  pageN += 1;
-  pixabayAPI.page = `${pageN}`;
+  variables.pageN += 1;
+  pixabayAPI.page = `${variables.pageN}`;
 
   try {
-    const results = await fetchPhotos(searchQueryResult);
+    const results = await fetchPhotos(variables.searchQueryResult);
     markupData.htmlCode = await renderedPhotos(results);
 
     gallerySelector.insertAdjacentHTML('beforeend', markupData.htmlCode);
     btnLoadMore.classList.add('is-visible');
 
-    gallery.refresh();
+    variables.gallery.refresh();
 
     const { page, per_page } = pixabayAPI;
     const { totalHits } = results;
@@ -95,12 +39,12 @@ btnLoadMore.addEventListener('click', async () => {
   }
 });
 
-async function fetchPhotos(searchQueryResult) {
+export async function fetchPhotos(searchQueryResult) {
   const { baseUrl, key, image_type, orientation, safesearch, order, page, per_page } = pixabayAPI;
-  pixabayAPI.page = `${pageN}`;
+  pixabayAPI.page = `${variables.pageN}`;
 
   const response = await axios.get(
-    `${baseUrl}?key=${key}&q=${q}&image_type=${image_type}&orientation=${orientation}&safesearch=${safesearch}&order=${order}&page=${page}&per_page=${per_page}`
+    `${baseUrl}?key=${key}&q=${variables.q}&image_type=${image_type}&orientation=${orientation}&safesearch=${safesearch}&order=${order}&page=${page}&per_page=${per_page}`
   );
   const results = response.data;
   const { total, totalHits } = results;
