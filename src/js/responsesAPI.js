@@ -1,5 +1,5 @@
 //import axios from 'axios';
-const axios = require('axios').default;
+//const axios = require('axios').default;
 
 export const pixabayAPI = {
   baseUrl: 'https://pixabay.com/api/',
@@ -11,7 +11,3 @@ export const pixabayAPI = {
   page: '1',
   per_page: '40',
 };
-
-export const response = axios.get(
-  `${baseUrl}?key=${key}&q=${q}&image_type=${image_type}&orientation=${orientation}&safesearch=${safesearch}&order=${order}&page=${page}&per_page=${per_page}`
-);
