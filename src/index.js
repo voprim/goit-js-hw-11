@@ -1,9 +1,8 @@
 import './sass/main.scss';
-const axios = require('axios').default;
 import variables from './js/variables';
-import renderedPhotos from './js/renderedPhotos';
-import { pixabayAPI } from './js/responsesAPI';
+import { pixabayAPI, expResult } from './js/responsesAPI';
 import handleSubmit from './js/handleSubmit';
+import renderedPhotos from './js/renderedPhotos';
 
 export const markupData = {
   markup: '',
@@ -39,24 +38,18 @@ btnLoadMore.addEventListener('click', async () => {
   }
 });
 
-export async function fetchPhotos(searchQueryResult) {
-  const { baseUrl, key, image_type, orientation, safesearch, order, page, per_page } = pixabayAPI;
-  pixabayAPI.page = `${variables.pageN}`;
-
-  const response = await axios.get(
-    `${baseUrl}?key=${key}&q=${variables.q}&image_type=${image_type}&orientation=${orientation}&safesearch=${safesearch}&order=${order}&page=${page}&per_page=${per_page}`
-  );
-  const results = response.data;
-  const { total, totalHits } = results;
-  const totalPages = Math.ceil(totalHits / per_page);
+export async function fetchPhotos(q) {
+  response = expResult(q, `${variables.pageN}`);
+  const { total, totalHits } = await response;
+  const totalPages = Math.ceil(totalHits / pixabayAPI.per_page);
 
   if (total === 0) {
     throw new Error();
   }
-  if (page >= totalPages) {
+  if (pixabayAPI.page >= totalPages) {
     btnLoadMore.classList.remove('is-visible');
     Notify.failure("We're sorry, but you've reached the end of search results.");
-    return results;
+    return expResult(q);
   }
-  return results;
+  return expResult(q);
 }

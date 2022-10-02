@@ -4,7 +4,7 @@ import { pixabayAPI } from './responsesAPI';
 import renderedPhotos from './renderedPhotos';
 import { fetchPhotos, markupData, gallerySelector, btnLoadMore } from '../index';
 
-export default handleSubmit = async e => {
+export default async e => {
   e.preventDefault();
   const {
     elements: { searchQuery },
@@ -31,7 +31,7 @@ export default handleSubmit = async e => {
   variables.q = searchQuery.value;
 
   try {
-    const results = await fetchPhotos(searchQuery.value);
+    const results = await fetchPhotos(variables.q);
     markupData.htmlCode = await renderedPhotos(results);
 
     gallerySelector.insertAdjacentHTML('beforeend', markupData.htmlCode);
