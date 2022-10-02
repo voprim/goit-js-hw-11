@@ -30,24 +30,24 @@ export default async e => {
 
   variables.q = searchQuery.value;
 
-  //try {
-  const results = await fetchPhotos(variables.q);
-  markupData.htmlCode = await renderedPhotos(results);
+  try {
+    const results = await fetchPhotos(variables.q);
+    markupData.htmlCode = await renderedPhotos(results);
 
-  gallerySelector.insertAdjacentHTML('beforeend', markupData.htmlCode);
-  btnLoadMore.classList.add('is-visible');
+    gallerySelector.insertAdjacentHTML('beforeend', markupData.htmlCode);
+    btnLoadMore.classList.add('is-visible');
 
-  variables.gallery.refresh();
+    variables.gallery.refresh();
 
-  const { page, per_page } = pixabayAPI;
-  const { totalHits } = results;
-  const totalPages = Math.ceil(totalHits / per_page);
+    const { page, per_page } = pixabayAPI;
+    const { totalHits } = results;
+    const totalPages = Math.ceil(totalHits / per_page);
 
-  if (page >= totalPages) {
-    btnLoadMore.classList.remove('is-visible');
+    if (page >= totalPages) {
+      btnLoadMore.classList.remove('is-visible');
+    }
+    Notify.success(`'Hooray! We found ${results.totalHits} images.'`);
+  } catch (error) {
+    Notify.failure('CATCH ERROR! Sorry, there are no images matching your search query. Please try again.');
   }
-  Notify.success(`'Hooray! We found ${results.totalHits} images.'`);
-  //} catch (error) {
-  //  Notify.failure('CATCH ERROR! Sorry, there are no images matching your search query. Please try again.');
-  //}
 };
