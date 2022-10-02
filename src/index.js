@@ -39,7 +39,7 @@ btnLoadMore.addEventListener('click', async () => {
 });
 
 export async function fetchPhotos(q) {
-  response = expResult(q, `${variables.pageN}`);
+  response = expResult(q, variables.pageN);
   const { total, totalHits } = await response;
   const totalPages = Math.ceil(totalHits / pixabayAPI.per_page);
 
