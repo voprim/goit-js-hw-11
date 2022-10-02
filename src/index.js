@@ -39,8 +39,7 @@ btnLoadMore.addEventListener('click', async () => {
 });
 
 export async function fetchPhotos(q) {
-  const response = expResult(q, variables.pageN);
-  const { total, totalHits } = await response;
+  const { total, totalHits } = await expResult(q, variables.pageN);
   const totalPages = Math.ceil(totalHits / pixabayAPI.per_page);
 
   if (total === 0) {
