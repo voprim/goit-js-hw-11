@@ -48,6 +48,6 @@ export default async e => {
     }
     Notify.success(`'Hooray! We found ${results.totalHits} images.'`);
   } catch (error) {
-    Notify.failure('Sorry, there are no images matching your search query. Please try again.');
+    Notify.failure('CATCH ERROR! Sorry, there are no images matching your search query. Please try again.');
   }
 };
