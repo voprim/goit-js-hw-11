@@ -1,4 +1,5 @@
 import './sass/main.scss';
+import { Notify } from 'notiflix';
 import variables from './js/variables';
 import { pixabayAPI, expResult } from './js/responsesAPI';
 import handleSubmit from './js/handleSubmit';
